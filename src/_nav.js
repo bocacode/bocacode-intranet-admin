@@ -4,7 +4,7 @@ import {
   cilBell,
   cilCalculator,
   cilChartPie,
-  cilCursor,
+  cilNewspaper,
   cilDescription,
   cilDrop,
   cilNotes,
@@ -28,7 +28,7 @@ const _nav = [
   },
   {
     component: CNavTitle,
-    name: 'Components',
+    name: 'Admin',
   },
   {
     component: CNavGroup,
@@ -109,27 +109,10 @@ const _nav = [
     ],
   },
   {
-    component: CNavGroup,
-    name: 'Buttons',
-    to: '/buttons',
-    icon: <CIcon icon={cilCursor} customClassName="nav-icon" />,
-    items: [
-      {
-        component: CNavItem,
-        name: 'Buttons',
-        to: '/buttons/buttons',
-      },
-      {
-        component: CNavItem,
-        name: 'Buttons groups',
-        to: '/buttons/button-groups',
-      },
-      {
-        component: CNavItem,
-        name: 'Dropdowns',
-        to: '/buttons/dropdowns',
-      },
-    ],
+    component: CNavItem,
+    name: 'News',
+    to: '/news',
+    icon: <CIcon icon={cilNewspaper} customClassName="nav-icon" />,
   },
   {
     component: CNavGroup,
