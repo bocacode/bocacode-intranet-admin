@@ -16,7 +16,7 @@ const NewsCard = () => {
           Some quick example text to build on the card title and make up the bulk of the card&apos;s
           content. Some quick example text to build on the card title and make up the bulk of the
           card&apos;s content. Some quick example text to build on the card title and make up the
-          bulk of the card&apos;s content.
+          bulk of the card&apos;s content...
         </CCardText>
       </CCardBody>
     </CCard>

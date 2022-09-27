@@ -1,8 +1,8 @@
 import React from 'react'
-import { AddArticle, WriteArticle } from './views/news'
 
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 const Articles = React.lazy(() => import('./views/news/articles/Articles'))
+const WriteArticle = React.lazy(() => import('./views/news/write-article/WriteArticle'))
 
 // Base
 const Accordion = React.lazy(() => import('./views/base/accordion/Accordion'))
