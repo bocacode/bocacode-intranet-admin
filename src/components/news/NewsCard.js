@@ -6,7 +6,10 @@ const NewsCard = () => {
     <CCard>
       <CCardHeader className="d-flex justify-content-between align-items-center">
         <strong>Story one</strong>
-        <CButton color="link">Edit</CButton>
+        <div>
+          <CButton color="link">Disable</CButton>
+          <CButton color="link">Edit</CButton>
+        </div>
       </CCardHeader>
       <CCardBody>
         <CCardText>

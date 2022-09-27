@@ -1,3 +1,4 @@
-import AddArticle from './add-article/AddArticle'
+import Articles from './articles/Articles'
+import WriteArticle from './write-article/WriteArticle'
 
-export { AddArticle }
+export { Articles, WriteArticle }

@@ -1,7 +1,8 @@
 import React from 'react'
-import { AddArticle } from './views/news'
+import { AddArticle, WriteArticle } from './views/news'
 
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
+const Articles = React.lazy(() => import('./views/news/articles/Articles'))
 
 // Base
 const Accordion = React.lazy(() => import('./views/base/accordion/Accordion'))
@@ -91,7 +92,9 @@ const routes = [
   { path: '/notifications/modals', name: 'Modals', element: Modals },
   { path: '/notifications/toasts', name: 'Toasts', element: Toasts },
   { path: '/widgets', name: 'Widgets', element: Widgets },
-  { path: '/news', name: 'News', element: AddArticle, exact: true },
+  { path: '/news', name: 'News', element: Articles, exact: true },
+  { path: '/news', name: 'News', element: Articles },
+  { path: '/news/write', name: 'Write', element: WriteArticle },
 ]
 
 export default routes

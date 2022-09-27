@@ -1,13 +1,16 @@
 import React from 'react'
-import { CCard, CCol, CRow, CButton } from '@coreui/react'
+import { CCol, CRow, CButton } from '@coreui/react'
 import NewsCard from 'src/components/news/NewsCard'
+import { Link } from 'react-router-dom'
 
-const AddArticle = () => {
+const Articles = () => {
   return (
     <>
       <CRow>
         <CCol xs={12} className="d-flex justify-content-end mb-4">
-          <CButton color="primary">Write a story</CButton>
+          <Link to="/news/write">
+            <CButton color="primary">Write a story</CButton>
+          </Link>
         </CCol>
       </CRow>
       <CRow>
@@ -22,4 +25,4 @@ const AddArticle = () => {
   )
 }
 
-export default AddArticle
+export default Articles
