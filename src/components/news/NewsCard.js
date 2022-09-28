@@ -1,11 +1,14 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { CCard, CCardHeader, CCardBody, CCardText, CButton } from '@coreui/react'
 
-const NewsCard = () => {
+const NewsCard = (props) => {
+  const { news } = props
+  const text = news.body.substr(0, 400) + '...'
   return (
     <CCard>
       <CCardHeader className="d-flex justify-content-between align-items-center">
-        <strong>Story one</strong>
+        <strong>{news.title}</strong>
         <div>
           <CButton color="link">Disable</CButton>
           <CButton color="link">Edit</CButton>
@@ -13,14 +16,18 @@ const NewsCard = () => {
       </CCardHeader>
       <CCardBody>
         <CCardText>
-          Some quick example text to build on the card title and make up the bulk of the card&apos;s
-          content. Some quick example text to build on the card title and make up the bulk of the
-          card&apos;s content. Some quick example text to build on the card title and make up the
-          bulk of the card&apos;s content...
+          {text}
+          <CButton color="link" size="sm">
+            Read more
+          </CButton>
         </CCardText>
       </CCardBody>
     </CCard>
   )
+}
+
+NewsCard.propTypes = {
+  news: PropTypes.object,
 }
 
 export default NewsCard

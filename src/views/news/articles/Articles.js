@@ -1,11 +1,18 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { CCol, CRow, CButton, CInputGroup, CInputGroupText, CFormInput } from '@coreui/react'
 import { Link } from 'react-router-dom'
 import CIcon from '@coreui/icons-react'
 import { cilSearch } from '@coreui/icons'
 import NewsCard from 'src/components/news/NewsCard'
+import { firestore } from 'src/firebaseConfig'
+import { FirestoreGetNews } from 'src/utils/firebaseUtils'
 
 const Articles = () => {
+  const [newsList, setNewsList] = useState([])
+
+  useEffect(() => {
+    FirestoreGetNews().then((data) => setNewsList(data))
+  }, [])
   return (
     <>
       <CRow>
@@ -29,10 +36,9 @@ const Articles = () => {
       </CRow>
       <CRow>
         <CCol xs={12} className="d-flex flex-column gap-3">
-          <NewsCard />
-          <NewsCard />
-          <NewsCard />
-          <NewsCard />
+          {newsList.map((news) => (
+            <NewsCard key={news.id} news={news} />
+          ))}
         </CCol>
       </CRow>
     </>
