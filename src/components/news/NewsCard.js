@@ -15,12 +15,7 @@ const NewsCard = (props) => {
         </div>
       </CCardHeader>
       <CCardBody>
-        <CCardText>
-          {text}
-          <CButton color="link" size="sm">
-            Read more
-          </CButton>
-        </CCardText>
+        <CCardText>{text}</CCardText>
       </CCardBody>
     </CCard>
   )
