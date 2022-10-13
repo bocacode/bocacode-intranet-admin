@@ -1,4 +1,4 @@
-import { collection, getDocs } from 'firebase/firestore'
+import { collection, getDocs, addDoc, Timestamp } from 'firebase/firestore'
 import { firestore } from 'src/firebaseConfig'
 
 const newsRef = collection(firestore, 'news')
@@ -12,6 +12,21 @@ export const FirestoreGetNews = async () => {
       return data.push({ ...doc.data(), id })
     })
     return data
+  } catch (e) {
+    console.log('error getting news', e)
+    return
+  }
+}
+
+export const FirestorePostNews = async ({ body, title }) => {
+  try {
+    const documentReference = await addDoc(newsRef, {
+      createdAt: Timestamp.now(),
+      timestamp: Date.now(),
+      title,
+      body,
+    })
+    return documentReference.id
   } catch (e) {
     console.log('error getting news', e)
     return

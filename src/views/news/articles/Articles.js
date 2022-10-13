@@ -34,12 +34,12 @@ const Articles = () => {
           </div>
         </CCol>
       </CRow>
-      <CRow>
-        <CCol xs={12} className="d-flex flex-column gap-3">
-          {newsList.map((news) => (
-            <NewsCard key={news.id} news={news} />
-          ))}
-        </CCol>
+      <CRow className="d-flex flex-row gap-3">
+        {newsList.map((news) => (
+          <CCol key={news.id}>
+            <NewsCard news={news} />
+          </CCol>
+        ))}
       </CRow>
     </>
   )
