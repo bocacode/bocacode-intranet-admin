@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   CCol,
   CRow,
@@ -9,19 +9,53 @@ import {
   CFormTextarea,
   CFormInput,
 } from '@coreui/react'
-import { FirestorePostNews } from 'src/utils/firebaseUtils'
+import {
+  FirestoreGetOneNews,
+  FirestorePostNews,
+  FirestoreUpdateOneNews,
+} from 'src/utils/firebaseUtils'
+import { useSearchParams } from 'react-router-dom'
 
 const WriteArticle = () => {
-  const [title, setTitle] = useState('')
-  const [body, setBody] = useState('')
+  const [isUpdating, setIsUpdating] = useState(false)
+  const [news, setNews] = useState()
+  const [searchParams, setSearchParams] = useSearchParams()
 
   const handleSubmit = () => {
-    FirestorePostNews({ body, title }).then((id) => {
-      console.log('docId', id)
-      setTitle('')
-      setBody('')
-    })
+    if (!isUpdating) {
+      FirestorePostNews({ body: news.body, title: news.title }).then((docId) => {
+        console.log('docId', docId)
+        setNews(null)
+      })
+    } else {
+      FirestoreUpdateOneNews(news).then(() => {
+        setNews(null)
+        setSearchParams({ id: '' })
+      })
+    }
   }
+
+  useEffect(() => {
+    const id = searchParams.get('id')
+    if (id) {
+      setNews(null)
+      FirestoreGetOneNews(id)
+        .then((value) => {
+          if (value) {
+            setIsUpdating(true)
+            setNews(value)
+          } else {
+            setIsUpdating(false)
+          }
+        })
+        .catch((err) => {
+          console.error(err)
+          setIsUpdating(false)
+        })
+    } else {
+      setIsUpdating(false)
+    }
+  }, [searchParams])
 
   return (
     <CRow>
@@ -30,15 +64,15 @@ const WriteArticle = () => {
           <CCardHeader className="d-flex justify-content-between align-items-center">
             <strong>Write</strong>
             <CButton color="primary" onClick={handleSubmit}>
-              Save
+              {isUpdating ? 'Update' : 'Save'}
             </CButton>
           </CCardHeader>
         </CCard>
         <CCard className="flex-grow-1">
           <CCardBody>
             <CFormInput
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              value={news?.title}
+              onChange={(e) => setNews({ ...news, title: e.target.value })}
               className="mb-3"
               required
               placeholder="Title here"
@@ -49,8 +83,8 @@ const WriteArticle = () => {
               id="exampleFormControlTextarea1"
               rows="5"
               placeholder="Write here"
-              value={body}
-              onChange={(e) => setBody(e.target.value)}
+              value={news?.body}
+              onChange={(e) => setNews({ ...news, body: e.target.value })}
             ></CFormTextarea>
           </CCardBody>
         </CCard>

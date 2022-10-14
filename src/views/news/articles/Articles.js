@@ -5,13 +5,21 @@ import CIcon from '@coreui/icons-react'
 import { cilSearch } from '@coreui/icons'
 import NewsCard from 'src/components/news/NewsCard'
 import { firestore } from 'src/firebaseConfig'
-import { FirestoreGetNews } from 'src/utils/firebaseUtils'
+import { onSnapshot, query, collection } from 'firebase/firestore'
 
 const Articles = () => {
   const [newsList, setNewsList] = useState([])
 
   useEffect(() => {
-    FirestoreGetNews().then((data) => setNewsList(data))
+    const unsubscribe = onSnapshot(query(collection(firestore, 'news')), (snapshot) => {
+      const data = []
+      snapshot.forEach((doc) => {
+        const id = doc.id
+        return data.push({ ...doc.data(), id })
+      })
+      setNewsList(data)
+    })
+    return () => unsubscribe()
   }, [])
   return (
     <>
@@ -34,12 +42,13 @@ const Articles = () => {
           </div>
         </CCol>
       </CRow>
-      <CRow className="d-flex flex-row gap-3">
-        {newsList.map((news) => (
-          <CCol key={news.id}>
-            <NewsCard news={news} />
-          </CCol>
-        ))}
+      <CRow className="d-flex flex-column gap-3">
+        {newsList &&
+          newsList.map((news) => (
+            <CCol key={news.id}>
+              <NewsCard news={news} />
+            </CCol>
+          ))}
       </CRow>
     </>
   )
