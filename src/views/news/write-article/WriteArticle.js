@@ -15,11 +15,13 @@ import {
   FirestoreUpdateOneNews,
 } from 'src/utils/firebaseUtils'
 import { useSearchParams } from 'react-router-dom'
+import { RichTextEditor } from 'src/components/news/richtexteditor'
 
 const WriteArticle = () => {
   const [isUpdating, setIsUpdating] = useState(false)
   const [news, setNews] = useState()
   const [searchParams, setSearchParams] = useSearchParams()
+  const [content, setContent] = useState({})
 
   const handleSubmit = () => {
     if (!isUpdating) {
@@ -68,6 +70,7 @@ const WriteArticle = () => {
             </CButton>
           </CCardHeader>
         </CCard>
+        <RichTextEditor setContent={setContent} />
         <CCard className="flex-grow-1">
           <CCardBody>
             <CFormInput
