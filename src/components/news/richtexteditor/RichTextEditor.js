@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import { Editor, EditorState, RichUtils, getDefaultKeyBinding, convertToRaw } from 'draft-js'
-import { CCard, CCardHeader, CCardBody } from '@coreui/react'
+import { CCard, CCardHeader, CCardBody, CFormInput } from '@coreui/react'
 
 import BlockStyleControls from './BlockStyleControls'
 import InlineStyleControls from './InlineStyleControls'
@@ -34,6 +34,7 @@ const RichTextEditor = ({ setContent }) => {
   const onChange = (state) => {
     setEditorState(state)
     setContent(convertToRaw(editorState.getCurrentContent()))
+    console.log(convertToRaw(editorState.getCurrentContent()))
   }
 
   const mapKeyToEditorCommand = (e) => {
@@ -64,23 +65,39 @@ const RichTextEditor = ({ setContent }) => {
     onChange(RichUtils.toggleInlineStyle(editorState, inlineStyle))
   }
 
+  const handleTitleDoneEdit = (e) => {
+    if (e.keyCode === 13) {
+      e.target.blur()
+      editorRef.current.focus()
+    }
+  }
+
   return (
     <CCard>
       <CCardHeader>
         <BlockStyleControls editorState={editorState} onToggle={toggleBlockType} />
         <InlineStyleControls editorState={editorState} onToggle={toggleInlineStyle} />
       </CCardHeader>
-      <Editor
-        ref={editorRef}
-        editorState={editorState}
-        placeholder="Tell a story..."
-        customStyleMap={styleMap}
-        blockStyleFn={(block) => getBlockStyle(block)}
-        keyBindingFn={(e) => mapKeyToEditorCommand(e)}
-        onChange={onChange}
-        spellCheck={true}
-        handleKeyCommand={handleKeyCommand}
-      />
+      <CCardBody>
+        <CFormInput
+          onKeyUp={handleTitleDoneEdit}
+          className="RichEditor-title"
+          type="text"
+          size="lg"
+          placeholder="Title"
+        />
+        <Editor
+          ref={editorRef}
+          editorState={editorState}
+          placeholder="Tell your story..."
+          customStyleMap={styleMap}
+          blockStyleFn={(block) => getBlockStyle(block)}
+          keyBindingFn={(e) => mapKeyToEditorCommand(e)}
+          onChange={onChange}
+          spellCheck={true}
+          handleKeyCommand={handleKeyCommand}
+        />
+      </CCardBody>
     </CCard>
   )
 }

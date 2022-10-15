@@ -5,11 +5,14 @@ import {
   cilBold,
   cilCode,
   cilDoubleQuoteSansLeft,
+  cilItalic,
   cilList,
   cilListNumbered,
   cilText,
   cilTextSize,
+  cilUnderline,
 } from '@coreui/icons'
+import { CTooltip } from '@coreui/react'
 
 const StyleButton = ({ active, style, label, onToggle }) => {
   const ICON = {
@@ -19,6 +22,10 @@ const StyleButton = ({ active, style, label, onToggle }) => {
     'unordered-list-item': cilList,
     'ordered-list-item': cilListNumbered,
     'code-block': cilCode,
+    BOLD: cilBold,
+    ITALIC: cilItalic,
+    UNDERLINE: cilUnderline,
+    CODE: cilCode,
   }
 
   const _onToggle = (e) => {
@@ -29,12 +36,14 @@ const StyleButton = ({ active, style, label, onToggle }) => {
   const className = 'RichEditor-styleButton'
 
   return (
-    <button
-      className={className + `${active ? ' RichEditor-activeButton' : ''}`}
-      onClick={_onToggle}
-    >
-      <CIcon icon={ICON[style]} size="lg" />
-    </button>
+    <CTooltip content={label}>
+      <button
+        className={className + `${active ? ' RichEditor-activeButton' : ''}`}
+        onClick={_onToggle}
+      >
+        <CIcon icon={ICON[style]} size="lg" />
+      </button>
+    </CTooltip>
   )
 }
 
