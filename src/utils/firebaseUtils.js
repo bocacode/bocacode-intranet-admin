@@ -47,13 +47,14 @@ export const FirestoreListenToNews = () => {
   }
 }
 
-export const FirestorePostNews = async ({ body, title }) => {
+export const FirestorePostNews = async (news) => {
   try {
     const documentReference = await addDoc(newsRef, {
       createdAt: Timestamp.now(),
       timestamp: Date.now(),
-      title,
-      body,
+      published: false,
+      data: news.data,
+      ...news,
     })
     return documentReference.id
   } catch (e) {
@@ -97,6 +98,7 @@ export const FirestoreUpdateOneNews = async (news) => {
       timestamp: Date.now(),
       title: news.title,
       body: news.body,
+      ...news,
     })
     return
   } catch (e) {

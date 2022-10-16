@@ -1,6 +1,13 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
-import { Editor, EditorState, RichUtils, getDefaultKeyBinding, convertToRaw } from 'draft-js'
+import {
+  Editor,
+  EditorState,
+  RichUtils,
+  getDefaultKeyBinding,
+  convertToRaw,
+  convertFromRaw,
+} from 'draft-js'
 import { CCard, CCardHeader, CCardBody, CFormInput } from '@coreui/react'
 
 import BlockStyleControls from './BlockStyleControls'
@@ -9,9 +16,30 @@ import InlineStyleControls from './InlineStyleControls'
 import 'draft-js/dist/Draft.css'
 import './RichEditor.css'
 
-const RichTextEditor = ({ setContent }) => {
+const RichTextEditor = ({
+  getContent,
+  getTitle,
+  dataFromFirestore,
+  titleFromFirestore,
+  isUpdating,
+}) => {
   const editorRef = useRef(null)
   const [editorState, setEditorState] = useState(EditorState.createEmpty())
+  const [isReady, setIsReady] = useState(false)
+  const [title, setTitle] = useState('')
+
+  useEffect(() => {
+    if (isUpdating && !isReady && dataFromFirestore) {
+      setEditorState(EditorState.createWithContent(convertFromRaw(dataFromFirestore)))
+      setTitle(titleFromFirestore)
+      setIsReady(true)
+    }
+  }, [dataFromFirestore, isUpdating, isReady, titleFromFirestore])
+
+  const handleTitle = (e) => {
+    getTitle(e.target.value)
+    setTitle(e.target.value)
+  }
 
   const styleMap = {
     CODE: {
@@ -33,8 +61,7 @@ const RichTextEditor = ({ setContent }) => {
 
   const onChange = (state) => {
     setEditorState(state)
-    setContent(convertToRaw(editorState.getCurrentContent()))
-    console.log(convertToRaw(editorState.getCurrentContent()))
+    getContent(convertToRaw(editorState.getCurrentContent()))
   }
 
   const mapKeyToEditorCommand = (e) => {
@@ -81,10 +108,13 @@ const RichTextEditor = ({ setContent }) => {
       <CCardBody>
         <CFormInput
           onKeyUp={handleTitleDoneEdit}
+          onChange={handleTitle}
+          value={title}
           className="RichEditor-title"
           type="text"
           size="lg"
           placeholder="Title"
+          required
         />
         <Editor
           ref={editorRef}
@@ -103,7 +133,11 @@ const RichTextEditor = ({ setContent }) => {
 }
 
 RichTextEditor.propTypes = {
-  setContent: PropTypes.any,
+  getContent: PropTypes.any,
+  getTitle: PropTypes.func,
+  dataFromFirestore: PropTypes.object,
+  isUpdating: PropTypes.bool,
+  titleFromFirestore: PropTypes.string,
 }
 
 export default RichTextEditor

@@ -1,14 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import {
-  CCol,
-  CRow,
-  CCard,
-  CButton,
-  CCardHeader,
-  CCardBody,
-  CFormTextarea,
-  CFormInput,
-} from '@coreui/react'
+import { CCol, CRow, CCard, CButton, CCardHeader, CForm } from '@coreui/react'
 import {
   FirestoreGetOneNews,
   FirestorePostNews,
@@ -21,20 +12,38 @@ const WriteArticle = () => {
   const [isUpdating, setIsUpdating] = useState(false)
   const [news, setNews] = useState()
   const [searchParams, setSearchParams] = useSearchParams()
-  const [content, setContent] = useState({})
 
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
+    console.log(news)
+    e.preventDefault()
+    if (!news.title) {
+      return false
+    }
+
     if (!isUpdating) {
-      FirestorePostNews({ body: news.body, title: news.title }).then((docId) => {
+      FirestorePostNews(news).then((docId) => {
         console.log('docId', docId)
         setNews(null)
       })
     } else {
       FirestoreUpdateOneNews(news).then(() => {
-        setNews(null)
         setSearchParams({ id: '' })
       })
     }
+  }
+
+  const handleTitleChange = (title) => {
+    setNews({ ...news, title: title })
+  }
+
+  const handleContentChange = (content) => {
+    const preview = content.blocks.filter((block) => {
+      return block.type === 'unstyled' && block.text.length !== 0
+    })
+
+    const thumbnailPreview = (preview[0]?.text + ' ' + preview[1]?.text).substring(0, 250) + '...'
+
+    setNews({ ...news, body: thumbnailPreview, data: content })
   }
 
   useEffect(() => {
@@ -61,36 +70,44 @@ const WriteArticle = () => {
 
   return (
     <CRow>
-      <CCol className="d-flex flex-column gap-3 h-100">
-        <CCard>
-          <CCardHeader className="d-flex justify-content-between align-items-center">
-            <strong>Write</strong>
-            <CButton color="primary" onClick={handleSubmit}>
-              {isUpdating ? 'Update' : 'Save'}
-            </CButton>
-          </CCardHeader>
-        </CCard>
-        <RichTextEditor setContent={setContent} />
-        <CCard className="flex-grow-1">
-          <CCardBody>
-            <CFormInput
-              value={news?.title}
-              onChange={(e) => setNews({ ...news, title: e.target.value })}
-              className="mb-3"
-              required
-              placeholder="Title here"
-              type="text"
-            />
-            <CFormTextarea
-              required
-              id="exampleFormControlTextarea1"
-              rows="5"
-              placeholder="Write here"
-              value={news?.body}
-              onChange={(e) => setNews({ ...news, body: e.target.value })}
-            ></CFormTextarea>
-          </CCardBody>
-        </CCard>
+      <CCol>
+        <CForm onSubmit={handleSubmit} className="d-flex flex-column gap-3 h-100">
+          <CCard>
+            <CCardHeader className="d-flex justify-content-between align-items-center">
+              <strong>Write</strong>
+              <CButton type="submit" style={{ pointerEvents: 'auto' }} color="primary">
+                {isUpdating ? 'Update' : 'Save'}
+              </CButton>
+            </CCardHeader>
+          </CCard>
+          <RichTextEditor
+            getTitle={handleTitleChange}
+            getContent={handleContentChange}
+            dataFromFirestore={news?.data}
+            titleFromFirestore={news?.title}
+            isUpdating={isUpdating}
+          />
+          {/* <CCard className="flex-grow-1">
+            <CCardBody>
+              <CFormInput
+                value={news?.title}
+                onChange={(e) => setNews({ ...news, title: e.target.value })}
+                className="mb-3"
+                required
+                placeholder="Title here"
+                type="text"
+              />
+              <CFormTextarea
+                required
+                id="exampleFormControlTextarea1"
+                rows="5"
+                placeholder="Write here"
+                value={news?.body}
+                onChange={(e) => setNews({ ...news, body: e.target.value })}
+              ></CFormTextarea>
+            </CCardBody>
+          </CCard> */}
+        </CForm>
       </CCol>
     </CRow>
   )
