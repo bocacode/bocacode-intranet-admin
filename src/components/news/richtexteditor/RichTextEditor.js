@@ -1,20 +1,21 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import {
-  Editor,
   EditorState,
   RichUtils,
   getDefaultKeyBinding,
   convertToRaw,
   convertFromRaw,
 } from 'draft-js'
+import Editor, { createEditorStateWithText } from '@draft-js-plugins/editor'
+import createInlineToolbarPlugin from '@draft-js-plugins/inline-toolbar'
 import { CCard, CCardHeader, CCardBody, CFormInput } from '@coreui/react'
 
 import BlockStyleControls from './BlockStyleControls'
 import InlineStyleControls from './InlineStyleControls'
 
-import 'draft-js/dist/Draft.css'
 import './RichEditor.css'
+import '@draft-js-plugins/inline-toolbar/lib/plugin.css'
 
 const RichTextEditor = ({
   getContent,
@@ -23,8 +24,13 @@ const RichTextEditor = ({
   titleFromFirestore,
   isUpdating,
 }) => {
+  const [plugins, InlineToolbar] = useMemo(() => {
+    const inlineToolbarPlugin = createInlineToolbarPlugin()
+    return [[inlineToolbarPlugin], inlineToolbarPlugin.InlineToolbar]
+  }, [])
+
   const editorRef = useRef(null)
-  const [editorState, setEditorState] = useState(EditorState.createEmpty())
+  const [editorState, setEditorState] = useState(createEditorStateWithText(''))
   const [isReady, setIsReady] = useState(false)
   const [title, setTitle] = useState('')
 
@@ -41,56 +47,56 @@ const RichTextEditor = ({
     setTitle(e.target.value)
   }
 
-  const styleMap = {
-    CODE: {
-      backgroundColor: 'rgba(0, 0, 0, 0.05)',
-      fontFamily: '"Inconsolata", "Menlo", "Consolas", monospace',
-      fontSize: 16,
-      padding: 2,
-    },
-  }
+  // const styleMap = {
+  //   CODE: {
+  //     backgroundColor: 'rgba(0, 0, 0, 0.05)',
+  //     fontFamily: '"Inconsolata", "Menlo", "Consolas", monospace',
+  //     fontSize: 16,
+  //     padding: 2,
+  //   },
+  // }
 
-  const getBlockStyle = (block) => {
-    switch (block.getType()) {
-      case 'blockquote':
-        return 'RichEditor-blockquote'
-      default:
-        return ''
-    }
-  }
+  // const getBlockStyle = (block) => {
+  //   switch (block.getType()) {
+  //     case 'blockquote':
+  //       return 'RichEditor-blockquote'
+  //     default:
+  //       return ''
+  //   }
+  // }
 
   const onChange = (state) => {
     setEditorState(state)
     getContent(convertToRaw(editorState.getCurrentContent()))
   }
 
-  const mapKeyToEditorCommand = (e) => {
-    if (e.keyCode === 9 /* TAB */) {
-      const newEditorState = RichUtils.onTab(e, editorState, 4 /* maxDepth */)
-      if (newEditorState !== editorState) {
-        onChange(newEditorState)
-      }
-      return null
-    }
-    return getDefaultKeyBinding(e)
-  }
+  // const mapKeyToEditorCommand = (e) => {
+  //   if (e.keyCode === 9 /* TAB */) {
+  //     const newEditorState = RichUtils.onTab(e, editorState, 4 /* maxDepth */)
+  //     if (newEditorState !== editorState) {
+  //       onChange(newEditorState)
+  //     }
+  //     return null
+  //   }
+  //   return getDefaultKeyBinding(e)
+  // }
 
-  const handleKeyCommand = (command, editorState, eventTimeStamp) => {
-    const newState = RichUtils.handleKeyCommand(editorState, command)
-    if (newState) {
-      onChange(newState)
-      return 'handled'
-    }
-    return 'not-handled'
-  }
+  // const handleKeyCommand = (command, editorState, eventTimeStamp) => {
+  //   const newState = RichUtils.handleKeyCommand(editorState, command)
+  //   if (newState) {
+  //     onChange(newState)
+  //     return 'handled'
+  //   }
+  //   return 'not-handled'
+  // }
 
-  const toggleBlockType = (blockType) => {
-    onChange(RichUtils.toggleBlockType(editorState, blockType))
-  }
+  // const toggleBlockType = (blockType) => {
+  //   onChange(RichUtils.toggleBlockType(editorState, blockType))
+  // }
 
-  const toggleInlineStyle = (inlineStyle) => {
-    onChange(RichUtils.toggleInlineStyle(editorState, inlineStyle))
-  }
+  // const toggleInlineStyle = (inlineStyle) => {
+  //   onChange(RichUtils.toggleInlineStyle(editorState, inlineStyle))
+  // }
 
   const handleTitleDoneEdit = (e) => {
     if (e.keyCode === 13) {
@@ -101,10 +107,10 @@ const RichTextEditor = ({
 
   return (
     <CCard>
-      <CCardHeader>
+      {/* <CCardHeader>
         <BlockStyleControls editorState={editorState} onToggle={toggleBlockType} />
         <InlineStyleControls editorState={editorState} onToggle={toggleInlineStyle} />
-      </CCardHeader>
+      </CCardHeader> */}
       <CCardBody>
         <CFormInput
           onKeyUp={handleTitleDoneEdit}
@@ -117,16 +123,18 @@ const RichTextEditor = ({
           required
         />
         <Editor
-          ref={editorRef}
+          ref={(element) => (editorRef.current = element)}
           editorState={editorState}
           placeholder="Tell your story..."
-          customStyleMap={styleMap}
-          blockStyleFn={(block) => getBlockStyle(block)}
-          keyBindingFn={(e) => mapKeyToEditorCommand(e)}
+          // customStyleMap={styleMap}
+          // blockStyleFn={(block) => getBlockStyle(block)}
+          // keyBindingFn={(e) => mapKeyToEditorCommand(e)}
           onChange={onChange}
           spellCheck={true}
-          handleKeyCommand={handleKeyCommand}
+          plugins={plugins}
+          // handleKeyCommand={handleKeyCommand}
         />
+        {/* <InlineToolbar /> */}
       </CCardBody>
     </CCard>
   )
