@@ -6,7 +6,6 @@ import {
   FirestoreUpdateOneNews,
 } from 'src/utils/firebaseUtils'
 import { useSearchParams } from 'react-router-dom'
-import { RichTextEditor } from 'src/components/news/richtexteditor'
 
 const WriteArticle = () => {
   const [isUpdating, setIsUpdating] = useState(false)
@@ -80,13 +79,6 @@ const WriteArticle = () => {
               </CButton>
             </CCardHeader>
           </CCard>
-          <RichTextEditor
-            getTitle={handleTitleChange}
-            getContent={handleContentChange}
-            dataFromFirestore={news?.data}
-            titleFromFirestore={news?.title}
-            isUpdating={isUpdating}
-          />
           {/* <CCard className="flex-grow-1">
             <CCardBody>
               <CFormInput
