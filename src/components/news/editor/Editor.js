@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
+import './style.scss'
 
 const Editor = () => {
   const modules = {
@@ -29,8 +30,13 @@ const Editor = () => {
   ]
 
   return (
-    <div className="editor-parent container-fluid p-0 flex-grow-1 ">
-      <ReactQuill theme="snow" modules={modules} formats={formats} />
+    <div className="editor-parent container-fluid p-0 flex-grow-1">
+      <ReactQuill
+        theme="snow"
+        modules={modules}
+        formats={formats}
+        placeholder="Tell your story..."
+      />
     </div>
   )
 }

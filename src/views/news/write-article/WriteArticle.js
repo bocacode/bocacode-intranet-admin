@@ -24,7 +24,6 @@ const WriteArticle = () => {
 
   useEffect(() => {
     const body = document.querySelector('.body')
-    const footer = document.querySelector('.footer')
     const container = document.querySelector('.editor-page')
     const editor = document.querySelector('.ql-container')
     const editorParent = document.querySelector('.editor-parent')
@@ -99,7 +98,7 @@ const WriteArticle = () => {
               <CFormInput
                 value={news?.title}
                 onChange={(e) => setNews({ ...news, title: e.target.value })}
-                className="mb-3 rounded-0 fs-1 fw-bold"
+                className="mb-3 rounded-0 fs-2 fw-bold"
                 required
                 placeholder="Title here"
                 type="text"
