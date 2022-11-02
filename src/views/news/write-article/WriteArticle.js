@@ -36,24 +36,24 @@ const WriteArticle = () => {
     })
   }, [])
 
-  // const handleSubmit = (e) => {
-  //   console.log(news)
-  //   e.preventDefault()
-  //   if (!news.title) {
-  //     return false
-  //   }
+  const handleSubmit = (e) => {
+    console.log(news)
+    e.preventDefault()
+    if (!news.title) {
+      return false
+    }
 
-  //   if (!isUpdating) {
-  //     FirestorePostNews(news).then((docId) => {
-  //       console.log('docId', docId)
-  //       setNews(null)
-  //     })
-  //   } else {
-  //     FirestoreUpdateOneNews(news).then(() => {
-  //       setSearchParams({ id: '' })
-  //     })
-  //   }
-  // }
+    // if (!isUpdating) {
+    //   FirestorePostNews(news).then((docId) => {
+    //     console.log('docId', docId)
+    //     setNews(null)
+    //   })
+    // } else {
+    //   FirestoreUpdateOneNews(news).then(() => {
+    //     setSearchParams({ id: '' })
+    //   })
+    // }
+  }
 
   const handleTitleChange = (title) => {
     setNews({ ...news, title: title })
@@ -84,7 +84,7 @@ const WriteArticle = () => {
   return (
     <CRow className="editor-page">
       <CCol>
-        <CForm className="d-flex flex-column gap-3 h-100">
+        <CForm onSubmit={handleSubmit} className="d-flex flex-column gap-3 h-100">
           <CCard>
             <CCardHeader className="d-flex justify-content-between align-items-center">
               <strong>Write</strong>
@@ -96,8 +96,8 @@ const WriteArticle = () => {
           <CCard className="flex-grow-1">
             <CCardBody className="d-flex flex-column">
               <CFormInput
-                value={news?.title}
-                onChange={(e) => setNews({ ...news, title: e.target.value })}
+                value={news?.title || ''}
+                onChange={(e) => handleTitleChange(e.target.value)}
                 className="mb-3 rounded-0 fs-2 fw-bold"
                 required
                 placeholder="Title here"

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
 import './style.scss'
@@ -36,6 +36,7 @@ const Editor = () => {
         modules={modules}
         formats={formats}
         placeholder="Tell your story..."
+        onChange={(_, delta, src, editor) => console.log(editor.getContents())}
       />
     </div>
   )

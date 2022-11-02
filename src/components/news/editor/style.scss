@@ -2,9 +2,15 @@
   color: #333333;
   p {
     font-size: medium;
+    margin-bottom: 1.2rem;
   }
-
+  h1 {
+    margin-block: 1.2rem;
+  }
   h2, h1 {
     font-weight: bold;
+  }
+  .ql-editor::before {
+    font-size: medium;
   }
 }
