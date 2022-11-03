@@ -9,6 +9,7 @@ import {
   CCardBody,
   CFormInput,
 } from '@coreui/react'
+import Quill from 'quill'
 import {
   FirestoreGetOneNews,
   FirestorePostNews,
@@ -21,6 +22,7 @@ const WriteArticle = () => {
   const [isUpdating, setIsUpdating] = useState(false)
   const [news, setNews] = useState()
   const [searchParams, setSearchParams] = useSearchParams()
+  const [defaultDelta, SetDefaultDelta] = useState({})
 
   useEffect(() => {
     const body = document.querySelector('.body')
@@ -42,44 +44,51 @@ const WriteArticle = () => {
     if (!news.title) {
       return false
     }
-
-    // if (!isUpdating) {
-    //   FirestorePostNews(news).then((docId) => {
-    //     console.log('docId', docId)
-    //     setNews(null)
-    //   })
-    // } else {
-    //   FirestoreUpdateOneNews(news).then(() => {
-    //     setSearchParams({ id: '' })
-    //   })
-    // }
+    if (!isUpdating) {
+      FirestorePostNews(news).then((docId) => {
+        console.log('docId', docId)
+        setNews(null)
+      })
+    } else {
+      FirestoreUpdateOneNews(news).then(() => {
+        setSearchParams({ id: '' })
+      })
+    }
   }
 
   const handleTitleChange = (title) => {
     setNews({ ...news, title: title })
   }
 
-  // useEffect(() => {
-  //   const id = searchParams.get('id')
-  //   if (id) {
-  //     setNews(null)
-  //     FirestoreGetOneNews(id)
-  //       .then((value) => {
-  //         if (value) {
-  //           setIsUpdating(true)
-  //           setNews(value)
-  //         } else {
-  //           setIsUpdating(false)
-  //         }
-  //       })
-  //       .catch((err) => {
-  //         console.error(err)
-  //         setIsUpdating(false)
-  //       })
-  //   } else {
-  //     setIsUpdating(false)
-  //   }
-  // }, [searchParams])
+  const handleDataChange = (data) => {
+    setNews({ ...news, data: data.ops })
+  }
+
+  useEffect(() => {
+    const id = searchParams.get('id')
+    if (id) {
+      setNews(null)
+      FirestoreGetOneNews(id)
+        .then((value) => {
+          if (value) {
+            setIsUpdating(true)
+            // Change here
+            const Delta = Quill.import('delta')
+            const newDelta = new Delta(value.data)
+            SetDefaultDelta(newDelta)
+            setNews(value)
+          } else {
+            setIsUpdating(false)
+          }
+        })
+        .catch((err) => {
+          console.error(err)
+          setIsUpdating(false)
+        })
+    } else {
+      setIsUpdating(false)
+    }
+  }, [searchParams])
 
   return (
     <CRow className="editor-page">
@@ -103,7 +112,7 @@ const WriteArticle = () => {
                 placeholder="Title here"
                 type="text"
               />
-              <Editor />
+              <Editor setDelta={defaultDelta} getDelta={handleDataChange} />
             </CCardBody>
           </CCard>
         </CForm>

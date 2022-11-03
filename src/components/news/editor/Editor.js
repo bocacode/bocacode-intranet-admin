@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import ReactQuill from 'react-quill'
+import PropTypes from 'prop-types'
 import 'react-quill/dist/quill.snow.css'
 import './style.scss'
 
-const Editor = () => {
+const Editor = ({ setDelta, getDelta }) => {
   const modules = {
     toolbar: [
       [{ header: [1, 2, false] }],
@@ -36,10 +37,15 @@ const Editor = () => {
         modules={modules}
         formats={formats}
         placeholder="Tell your story..."
-        onChange={(_, delta, src, editor) => console.log(editor.getContents())}
+        onChange={(_, delta, src, editor) => getDelta(editor.getContents())}
       />
     </div>
   )
+}
+
+Editor.propTypes = {
+  setDelta: PropTypes.object,
+  getDelta: PropTypes.func,
 }
 
 export default Editor
