@@ -1,10 +1,16 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import ReactQuill from 'react-quill'
 import PropTypes from 'prop-types'
 import 'react-quill/dist/quill.snow.css'
 import './style.scss'
 
 const Editor = ({ setDelta, getDelta }) => {
+  const [value, setValue] = useState({})
+
+  useEffect(() => {
+    setValue(setDelta)
+  }, [setDelta])
+
   const modules = {
     toolbar: [
       [{ header: [1, 2, false] }],
@@ -30,6 +36,11 @@ const Editor = ({ setDelta, getDelta }) => {
     'code-block',
   ]
 
+  const handleDataChange = (editor) => {
+    getDelta(editor.getContents())
+    setValue(editor.getContents())
+  }
+
   return (
     <div className="editor-parent container-fluid p-0 flex-grow-1">
       <ReactQuill
@@ -37,7 +48,8 @@ const Editor = ({ setDelta, getDelta }) => {
         modules={modules}
         formats={formats}
         placeholder="Tell your story..."
-        onChange={(_, delta, src, editor) => getDelta(editor.getContents())}
+        onChange={(_, delta, src, editor) => handleDataChange(editor)}
+        value={value}
       />
     </div>
   )

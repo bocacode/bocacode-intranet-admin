@@ -20,9 +20,9 @@ import Editor from 'src/components/news/editor/Editor'
 
 const WriteArticle = () => {
   const [isUpdating, setIsUpdating] = useState(false)
-  const [news, setNews] = useState()
+  const [news, setNews] = useState({ title: '', data: [] })
   const [searchParams, setSearchParams] = useSearchParams()
-  const [defaultDelta, SetDefaultDelta] = useState({})
+  const [defaultDelta, setDefaultDelta] = useState({})
 
   useEffect(() => {
     const body = document.querySelector('.body')
@@ -44,6 +44,7 @@ const WriteArticle = () => {
     if (!news.title) {
       return false
     }
+
     if (!isUpdating) {
       FirestorePostNews(news).then((docId) => {
         console.log('docId', docId)
@@ -56,12 +57,21 @@ const WriteArticle = () => {
     }
   }
 
+  const generateBody = (arr) => {
+    const textArr = arr.map((obj) => {
+      const text = obj.insert.replace(/\n/g, ' ')
+      return text
+    })
+    return textArr.join('').trim()
+  }
+
   const handleTitleChange = (title) => {
     setNews({ ...news, title: title })
   }
 
   const handleDataChange = (data) => {
-    setNews({ ...news, data: data.ops })
+    const body = generateBody(data.ops)
+    setNews({ ...news, data: data.ops, body })
   }
 
   useEffect(() => {
@@ -75,7 +85,7 @@ const WriteArticle = () => {
             // Change here
             const Delta = Quill.import('delta')
             const newDelta = new Delta(value.data)
-            SetDefaultDelta(newDelta)
+            setDefaultDelta(newDelta)
             setNews(value)
           } else {
             setIsUpdating(false)
@@ -90,7 +100,7 @@ const WriteArticle = () => {
     }
   }, [searchParams])
 
-  return (
+  return news ? (
     <CRow className="editor-page">
       <CCol>
         <CForm onSubmit={handleSubmit} className="d-flex flex-column gap-3 h-100">
@@ -105,7 +115,7 @@ const WriteArticle = () => {
           <CCard className="flex-grow-1">
             <CCardBody className="d-flex flex-column">
               <CFormInput
-                value={news?.title || ''}
+                value={news.title}
                 onChange={(e) => handleTitleChange(e.target.value)}
                 className="mb-3 rounded-0 fs-2 fw-bold"
                 required
@@ -118,6 +128,8 @@ const WriteArticle = () => {
         </CForm>
       </CCol>
     </CRow>
+  ) : (
+    <div>Loading...</div>
   )
 }
 

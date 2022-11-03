@@ -51,6 +51,7 @@ export const FirestorePostNews = async (news) => {
   try {
     const documentReference = await addDoc(newsRef, {
       createdAt: Timestamp.now(),
+      updatedAt: Timestamp.now(),
       timestamp: Date.now(),
       published: false,
       data: news.data,
@@ -94,8 +95,7 @@ export const FirestoreGetOneNews = async (id) => {
 export const FirestoreUpdateOneNews = async (news) => {
   try {
     await updateDoc(doc(newsRef, news.id), {
-      createdAt: Timestamp.now(),
-      timestamp: Date.now(),
+      updatedAt: Timestamp.now(),
       title: news.title,
       body: news.body,
       ...news,
