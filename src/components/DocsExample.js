@@ -18,12 +18,12 @@ const DocsExample = (props) => {
             Preview
           </CNavLink>
         </CNavItem>
-        <CNavItem>
+        {/* <CNavItem>
           <CNavLink href={_href} target="_blank">
             <CIcon icon={cilCode} className="me-2" />
             Code
           </CNavLink>
-        </CNavItem>
+        </CNavItem> */}
       </CNav>
       <CTabContent className="rounded-bottom">
         <CTabPane className="p-3 preview" visible>
