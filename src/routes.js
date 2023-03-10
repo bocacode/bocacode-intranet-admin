@@ -14,10 +14,10 @@ const routes = [
   { path: '/', exact: true, name: 'Home' },
   { path: '/dashboard', name: 'Dashboard', element: Dashboard },
 
-  { path: '/restaurants/', name: 'Restaurants', element: Restaurants },
+  { path: '/restaurants', name: 'Restaurants', element: Restaurants },
   { path: '/restaurants/add', name: 'Restaurant', element: AddRestaurant },
 
-  { path: '/tutorials/', name: 'Tutorials', element: Tutorials },
+  { path: '/tutorials', name: 'Tutorials', element: Tutorials },
   { path: '/tutorials/add', name: 'Add Tutorials', element: AddTutorial },
 ]
 

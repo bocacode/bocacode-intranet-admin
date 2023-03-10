@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { UserContext } from 'src/App'
 import {
   CCard,
   CCardBody,
@@ -16,10 +17,17 @@ import {
 import { DocsExample } from 'src/components'
 
 const Tutorials = () => {
+  const { user } = React.useContext(UserContext)
   const [data, setData] = React.useState([])
 
   React.useEffect(() => {
-    fetch(`${process.env.REACT_APP_API_ENDPOINT}/tutorials`)
+    fetch(`${process.env.REACT_APP_API_ENDPOINT}/tutorials`, {
+      method: 'GET',
+      headers: {
+        'Content-type': 'application/json',
+        Authorization: `Bearer ${user.accessToken}`, // notice the Bearer before your token
+      },
+    })
       .then((res) => res.json())
       .then((parsedData) => setData(parsedData))
       .catch((err) => console.error(err))

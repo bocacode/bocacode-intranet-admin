@@ -1,5 +1,4 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 import {
   CButton,
   CCard,
@@ -16,7 +15,34 @@ import {
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
 
+import { UserContext } from '../../../App'
+
 const Login = () => {
+  const { setUser } = React.useContext(UserContext)
+  const [form, setForm] = React.useState({})
+
+  const handleForm = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value })
+  }
+
+  const handleFormSubmit = (e) => {
+    console.log('handle form submit ')
+    e.preventDefault()
+    fetch(`${process.env.REACT_APP_API_ENDPOINT}/users/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(form),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        localStorage.setItem('bc_admin_user', JSON.stringify(data))
+        setUser(data)
+      })
+      .catch((err) => console.log(err))
+  }
+
   return (
     <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
       <CContainer>
@@ -32,21 +58,28 @@ const Login = () => {
                       <CInputGroupText>
                         <CIcon icon={cilUser} />
                       </CInputGroupText>
-                      <CFormInput placeholder="Username" autoComplete="username" />
+                      <CFormInput
+                        name="email"
+                        placeholder="Email"
+                        autoComplete="email"
+                        onChange={handleForm}
+                      />
                     </CInputGroup>
                     <CInputGroup className="mb-4">
                       <CInputGroupText>
                         <CIcon icon={cilLockLocked} />
                       </CInputGroupText>
                       <CFormInput
+                        name="password"
                         type="password"
                         placeholder="Password"
                         autoComplete="current-password"
+                        onChange={handleForm}
                       />
                     </CInputGroup>
                     <CRow>
                       <CCol xs={6}>
-                        <CButton color="primary" className="px-4">
+                        <CButton onClick={handleFormSubmit} color="primary" className="px-4">
                           Login
                         </CButton>
                       </CCol>
@@ -57,22 +90,6 @@ const Login = () => {
                       </CCol>
                     </CRow>
                   </CForm>
-                </CCardBody>
-              </CCard>
-              <CCard className="text-white bg-primary py-5" style={{ width: '44%' }}>
-                <CCardBody className="text-center">
-                  <div>
-                    <h2>Sign up</h2>
-                    <p>
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                      tempor incididunt ut labore et dolore magna aliqua.
-                    </p>
-                    <Link to="/register">
-                      <CButton color="primary" className="mt-3" active tabIndex={-1}>
-                        Register Now!
-                      </CButton>
-                    </Link>
-                  </div>
                 </CCardBody>
               </CCard>
             </CCardGroup>

@@ -1,5 +1,6 @@
-import React, { Component, Suspense } from 'react'
+import React, { Suspense, useEffect, useState, createContext } from 'react'
 import { HashRouter, Route, Routes } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import './scss/style.scss'
 
 const loading = (
@@ -13,26 +14,45 @@ const DefaultLayout = React.lazy(() => import('./layout/DefaultLayout'))
 
 // Pages
 const Login = React.lazy(() => import('./views/pages/login/Login'))
-const Register = React.lazy(() => import('./views/pages/register/Register'))
 const Page404 = React.lazy(() => import('./views/pages/page404/Page404'))
-const Page500 = React.lazy(() => import('./views/pages/page500/Page500'))
 
-class App extends Component {
-  render() {
-    return (
-      <HashRouter>
-        <Suspense fallback={loading}>
+export const UserContext = createContext({})
+
+const App = () => {
+  const [user, setUser] = useState({})
+  console.log('user in app', user)
+
+  useEffect(() => {
+    const bc_admin_user = localStorage.getItem('bc_admin_user')
+    if (bc_admin_user) {
+      setUser(JSON.parse(bc_admin_user))
+    } else {
+      localStorage.clear()
+      setUser(undefined)
+    }
+  }, [])
+
+  return (
+    <HashRouter>
+      <Suspense fallback={loading}>
+        <UserContext.Provider value={{ user, setUser }}>
           <Routes>
-            <Route exact path="/login" name="Login Page" element={<Login />} />
-            <Route exact path="/register" name="Register Page" element={<Register />} />
-            <Route exact path="/404" name="Page 404" element={<Page404 />} />
-            <Route exact path="/500" name="Page 500" element={<Page500 />} />
-            <Route path="*" name="Home" element={<DefaultLayout />} />
+            {user ? (
+              <Route path="*" name="Home" element={<DefaultLayout />} />
+            ) : (
+              <Route exact path="/" name="Login Page" element={<Login />} />
+            )}
           </Routes>
-        </Suspense>
-      </HashRouter>
-    )
-  }
+
+          {/* <Routes>
+            <Route exact path="/login" name="Login Page" element={<Login />} />
+            <Route exact path="/404" name="Page 404" element={<Page404 />} />
+            
+          </Routes> */}
+        </UserContext.Provider>
+      </Suspense>
+    </HashRouter>
+  )
 }
 
 export default App
