@@ -2,7 +2,9 @@ import React from 'react'
 
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 
-// tutorials
+const Users = React.lazy(() => import('./views/users/Users.js'))
+const AddUser = React.lazy(() => import('./views/users/AddUser.js'))
+
 const Restaurants = React.lazy(() => import('./views/restaurants/Restaurants'))
 const AddRestaurant = React.lazy(() => import('./views/restaurants/AddRestaurant'))
 
@@ -13,6 +15,9 @@ const AddTutorial = React.lazy(() => import('./views/tutorials/AddTutorial'))
 const routes = [
   { path: '/', exact: true, name: 'Home' },
   { path: '/dashboard', name: 'Dashboard', element: Dashboard },
+
+  { path: '/users', name: 'Users', element: Users },
+  { path: '/users/add', name: 'Users', element: AddUser },
 
   { path: '/restaurants', name: 'Restaurants', element: Restaurants },
   { path: '/restaurants/add', name: 'Restaurant', element: AddRestaurant },

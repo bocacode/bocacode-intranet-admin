@@ -17,6 +17,33 @@ const _nav = [
 
   {
     component: CNavGroup,
+    name: 'Users',
+    icon: <CIcon icon={cilBell} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'All',
+        to: '/users/',
+      },
+      {
+        component: CNavItem,
+        name: 'Add',
+        to: '/users/add',
+      },
+      // {
+      //   component: CNavItem,
+      //   name: 'Modal',
+      //   to: '/restaurants/modals',
+      // },
+      // {
+      //   component: CNavItem,
+      //   name: 'Toasts',
+      //   to: '/restaurants/toasts',
+      // },
+    ],
+  },
+  {
+    component: CNavGroup,
     name: 'Restaurants',
     icon: <CIcon icon={cilBell} customClassName="nav-icon" />,
     items: [
