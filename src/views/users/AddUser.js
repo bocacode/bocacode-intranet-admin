@@ -1,4 +1,5 @@
-import React from 'react'
+import * as React from 'react'
+import { UserContext } from 'src/App'
 import {
   CButton,
   CCard,
@@ -22,6 +23,26 @@ import {
 import { DocsExample } from 'src/components'
 
 const AddRestaurant = () => {
+  const { user } = React.useContext(UserContext)
+  const [form, setForm] = React.useState({})
+
+  const handleFormUpdate = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value })
+  }
+
+  const handleFormSubmit = () => {
+    fetch(`${process.env.REACT_APP_API_ENDPOINT}/users/signup`, {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json',
+        Authorization: `Bearer ${user.accessToken}`, // notice the Bearer before your token
+      },
+      body: JSON.stringify(form),
+    })
+      .then((res) => res.json())
+      .catch((err) => console.error(err))
+  }
+
   return (
     <CRow>
       <CCol xs={12}>
@@ -37,40 +58,48 @@ const AddRestaurant = () => {
             </p>
             <DocsExample href="forms/input-group">
               <CInputGroup className="mb-3">
-                <CInputGroupText id="basic-addon1">@</CInputGroupText>
+                <CInputGroupText id="basic-addon1">Email</CInputGroupText>
                 <CFormInput
-                  placeholder="Username"
-                  aria-label="Username"
+                  onChange={handleFormUpdate}
+                  name="email"
+                  placeholder="Email"
+                  aria-label="Email"
                   aria-describedby="basic-addon1"
                 />
               </CInputGroup>
               <CInputGroup className="mb-3">
+                <CInputGroupText id="basic-addon1">First Name</CInputGroupText>
                 <CFormInput
-                  placeholder="Recipient&#39;s username"
-                  aria-label="Recipient&#39;s username"
-                  aria-describedby="basic-addon2"
+                  onChange={handleFormUpdate}
+                  name="first_name"
+                  placeholder="First Name"
+                  aria-label="First Name"
+                  aria-describedby="basic-addon1"
                 />
-                <CInputGroupText id="basic-addon2">@example.com</CInputGroupText>
-              </CInputGroup>
-              <CFormLabel htmlFor="basic-url">Your vanity URL</CFormLabel>
-              <CInputGroup className="mb-3">
-                <CInputGroupText id="basic-addon3">https://example.com/users/</CInputGroupText>
-                <CFormInput id="basic-url" aria-describedby="basic-addon3" />
               </CInputGroup>
               <CInputGroup className="mb-3">
-                <CInputGroupText>$</CInputGroupText>
-                <CFormInput aria-label="Amount (to the nearest dollar)" />
-                <CInputGroupText>.00</CInputGroupText>
+                <CInputGroupText id="basic-addon1">Last Name</CInputGroupText>
+                <CFormInput
+                  onChange={handleFormUpdate}
+                  name="last_name"
+                  placeholder="Last Name"
+                  aria-label="Last Name"
+                  aria-describedby="basic-addon1"
+                />
               </CInputGroup>
               <CInputGroup className="mb-3">
-                <CFormInput placeholder="Username" aria-label="Username" />
-                <CInputGroupText>@</CInputGroupText>
-                <CFormInput placeholder="Server" aria-label="Server" />
+                <CInputGroupText id="basic-addon1">Password</CInputGroupText>
+                <CFormInput
+                  onChange={handleFormUpdate}
+                  name="password"
+                  placeholder="Password"
+                  aria-label="Password"
+                  aria-describedby="basic-addon1"
+                />
               </CInputGroup>
-              <CInputGroup>
-                <CInputGroupText>With textarea</CInputGroupText>
-                <CFormTextarea aria-label="With textarea"></CFormTextarea>
-              </CInputGroup>
+              <CButton onClick={handleFormSubmit} color="primary" className="px-4">
+                Add User
+              </CButton>
             </DocsExample>
           </CCardBody>
         </CCard>
