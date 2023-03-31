@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useParams } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import {
   CButton,
   CCard,
@@ -24,20 +24,36 @@ import { DocsExample } from 'src/components'
 
 import { UserContext } from 'src/App'
 
-const SingleUser = () => {
+const SingleUser = (props) => {
   const { user } = React.useContext(UserContext)
   const [form, setForm] = React.useState({})
-  const params = useParams()
+  const { state } = useLocation()
 
-  console.log(params.id)
+  const id = state
+  console.log(id)
+
+  React.useEffect(() => {
+    fetch(`${process.env.REACT_APP_API_ENDPOINT}/users/user?id=64261b6c9e8dc646372b29b3`, {
+      method: 'GET',
+      headers: {
+        'Content-type': 'application/json',
+        Authorization: `Bearer ${user.accessToken}`, // notice the Bearer before your token
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => setForm(data))
+      .catch((err) => console.error(err))
+  }, [])
+
+  console.log(form)
 
   const handleFormUpdate = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value })
   }
 
   const handleFormSubmit = () => {
-    fetch(`${process.env.REACT_APP_API_ENDPOINT}/users/signup`, {
-      method: 'POST',
+    fetch(`${process.env.REACT_APP_API_ENDPOINT}/users/update`, {
+      method: 'PATCH',
       headers: {
         'Content-type': 'application/json',
         Authorization: `Bearer ${user.accessToken}`, // notice the Bearer before your token
@@ -70,6 +86,7 @@ const SingleUser = () => {
                   placeholder="Email"
                   aria-label="Email"
                   aria-describedby="basic-addon1"
+                  value={form.email}
                 />
               </CInputGroup>
               <CInputGroup className="mb-3">
@@ -80,6 +97,7 @@ const SingleUser = () => {
                   placeholder="First Name"
                   aria-label="First Name"
                   aria-describedby="basic-addon1"
+                  value={form.first_name}
                 />
               </CInputGroup>
               <CInputGroup className="mb-3">
@@ -90,6 +108,7 @@ const SingleUser = () => {
                   placeholder="Last Name"
                   aria-label="Last Name"
                   aria-describedby="basic-addon1"
+                  value={form.last_name}
                 />
               </CInputGroup>
               <CInputGroup className="mb-3">
@@ -100,10 +119,12 @@ const SingleUser = () => {
                   placeholder="Password"
                   aria-label="Password"
                   aria-describedby="basic-addon1"
+                  value={form.password}
+                  disabled
                 />
               </CInputGroup>
               <CButton onClick={handleFormSubmit} color="primary" className="px-4">
-                Add User
+                Update User
               </CButton>
             </DocsExample>
           </CCardBody>

@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { NavLink } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 
 import {
   CCard,
@@ -49,6 +49,7 @@ const Tables = () => {
                 <CTableHead>
                   <CTableRow>
                     <CTableHeaderCell scope="col">#</CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Email</CTableHeaderCell>
                     <CTableHeaderCell scope="col">First Name</CTableHeaderCell>
                     <CTableHeaderCell scope="col">Last Name</CTableHeaderCell>
                     <CTableHeaderCell scope="col">Status</CTableHeaderCell>
@@ -61,10 +62,11 @@ const Tables = () => {
                 <CTableBody>
                   {users?.map((item) => {
                     return (
-                      <CTableRow key={item.uid}>
-                        <CNavLink to="/users/user?id=64261b6c9e8dc646372b29b3" component={NavLink}>
+                      <CTableRow key={item._id}>
+                        <Link to="/users/user" state={item._id}>
                           <CTableHeaderCell scope="row">{item._id}</CTableHeaderCell>
-                        </CNavLink>
+                        </Link>
+                        <CTableDataCell>{item.email}</CTableDataCell>
                         <CTableDataCell>{item.first_name}</CTableDataCell>
                         <CTableDataCell>{item.last_name}</CTableDataCell>
                         <CTableDataCell>{item.status}</CTableDataCell>
