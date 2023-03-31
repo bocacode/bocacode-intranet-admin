@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { UserContext } from 'src/App'
+import { useParams } from 'react-router-dom'
 import {
   CButton,
   CCard,
@@ -22,9 +22,14 @@ import {
 } from '@coreui/react'
 import { DocsExample } from 'src/components'
 
-const AddUser = () => {
+import { UserContext } from 'src/App'
+
+const SingleUser = () => {
   const { user } = React.useContext(UserContext)
   const [form, setForm] = React.useState({})
+  const params = useParams()
+
+  console.log(params.id)
 
   const handleFormUpdate = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value })
@@ -108,4 +113,4 @@ const AddUser = () => {
   )
 }
 
-export default AddUser
+export default SingleUser

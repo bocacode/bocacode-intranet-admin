@@ -1,5 +1,6 @@
 import * as React from 'react'
-import { UserContext } from 'src/App'
+import { NavLink } from 'react-router-dom'
+
 import {
   CCard,
   CCardBody,
@@ -8,13 +9,15 @@ import {
   CRow,
   CTable,
   CTableBody,
-  CTableCaption,
+  CNavLink,
   CTableDataCell,
   CTableHead,
   CTableHeaderCell,
   CTableRow,
 } from '@coreui/react'
 import { DocsExample } from 'src/components'
+
+import { UserContext } from 'src/App'
 
 const Tables = () => {
   const { user } = React.useContext(UserContext)
@@ -42,7 +45,7 @@ const Tables = () => {
           </CCardHeader>
           <CCardBody>
             <DocsExample href="components/table">
-              <CTable>
+              <CTable hover>
                 <CTableHead>
                   <CTableRow>
                     <CTableHeaderCell scope="col">#</CTableHeaderCell>
@@ -59,7 +62,9 @@ const Tables = () => {
                   {users?.map((item) => {
                     return (
                       <CTableRow key={item.uid}>
-                        <CTableHeaderCell scope="row">{item._id}</CTableHeaderCell>
+                        <CNavLink to="/users/user?id=64261b6c9e8dc646372b29b3" component={NavLink}>
+                          <CTableHeaderCell scope="row">{item._id}</CTableHeaderCell>
+                        </CNavLink>
                         <CTableDataCell>{item.first_name}</CTableDataCell>
                         <CTableDataCell>{item.last_name}</CTableDataCell>
                         <CTableDataCell>{item.status}</CTableDataCell>
