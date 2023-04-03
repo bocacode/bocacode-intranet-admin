@@ -60,13 +60,20 @@ const Tables = () => {
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
-                  {users?.map((item) => {
+                  {users?.map((item, index) => {
                     return (
                       <CTableRow key={item._id}>
-                        <Link to="/users/user" state={item._id}>
-                          <CTableHeaderCell scope="row">{item._id}</CTableHeaderCell>
-                        </Link>
-                        <CTableDataCell>{item.email}</CTableDataCell>
+                        <CTableDataCell>
+                          <Link to="/users/user" state={item._id}>
+                            {index + 1}
+                          </Link>
+                        </CTableDataCell>
+
+                        <CTableDataCell>
+                          {/* <Link to="/users/user" state={item._id}> */}
+                          {item.email}
+                          {/* </Link> */}
+                        </CTableDataCell>
                         <CTableDataCell>{item.first_name}</CTableDataCell>
                         <CTableDataCell>{item.last_name}</CTableDataCell>
                         <CTableDataCell>{item.status}</CTableDataCell>
