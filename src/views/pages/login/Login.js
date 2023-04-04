@@ -37,8 +37,10 @@ const Login = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        localStorage.setItem('bc_admin_user', JSON.stringify(data))
-        setUser(data)
+        if (data.access_level > 0) {
+          localStorage.setItem('bc_admin_user', JSON.stringify(data))
+          setUser(data)
+        }
       })
       .catch((err) => console.log(err))
   }

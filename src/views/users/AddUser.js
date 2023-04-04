@@ -47,7 +47,6 @@ const AddUser = () => {
       body: JSON.stringify(form),
     })
       .then((res) => {
-        console.log(res)
         if (!res.ok) {
           e.preventDefault()
         } else {

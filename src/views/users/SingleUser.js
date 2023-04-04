@@ -17,6 +17,7 @@ import {
   CTableBody,
   CTableDataCell,
   CRow,
+  CFormCheck,
 } from '@coreui/react'
 import { DocsExample } from 'src/components'
 
@@ -54,13 +55,18 @@ const SingleUser = () => {
       .then((res) => res.json())
       .then((data) => setLogs(data))
       .catch((err) => console.error(err))
-  }, [form])
+  }, [])
 
   const handleFormUpdate = (e) => {
+    console.log(e.target.name)
     setForm({ ...form, [e.target.name]: e.target.value })
+
+    if (e.target.name === 'active') {
+      setForm({ ...form, [e.target.name]: e.target.checked })
+    }
   }
 
-  const handleFormSubmit = () => {
+  const handleFormSubmit = (e) => {
     fetch(`${process.env.REACT_APP_API_ENDPOINT}/users/update`, {
       method: 'PATCH',
       headers: {
@@ -69,7 +75,10 @@ const SingleUser = () => {
       },
       body: JSON.stringify(form),
     })
-      .then((res) => res.json())
+      .then((res) => {
+        window.location.reload(false)
+        return res.json()
+      })
       .catch((err) => console.error(err))
   }
 
@@ -126,25 +135,32 @@ const SingleUser = () => {
                   <CInputGroupText id="basic-addon1">Access</CInputGroupText>
                   <CFormSelect
                     onChange={handleFormUpdate}
-                    options={['10', '0']}
+                    options={[
+                      { value: 0, label: '0' },
+                      { value: 10, label: '10' },
+                    ]}
                     name="access_level"
                     placeholder="Access"
                     aria-label="Access"
                     aria-describedby="basic-addon1"
                     value={form.access_level}
-                  />
-                </CInputGroup>
-                <CInputGroup className="mb-3">
-                  <CInputGroupText id="basic-addon1">Status</CInputGroupText>
-                  <CFormSelect
-                    options={['disabled', 'pending', 'active']}
-                    onChange={handleFormUpdate}
-                    name="status"
-                    placeholder="Status"
-                    aria-label="Status"
-                    aria-describedby="basic-addon1"
-                    value={form.status}
-                  />
+                  >
+                    <option value={0}> 0</option>
+                    <option value={10}> 10</option>
+                  </CFormSelect>
+
+                  <CInputGroup className="my-3">
+                    <CFormCheck
+                      type="checkbox"
+                      label="Active"
+                      onChange={handleFormUpdate}
+                      name="active"
+                      placeholder="Active"
+                      aria-label="Active"
+                      aria-describedby="Active"
+                      checked={form.active}
+                    />
+                  </CInputGroup>
                 </CInputGroup>
                 <CButton onClick={handleFormSubmit} color="primary" className="px-4">
                   Update User

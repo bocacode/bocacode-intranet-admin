@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Link, NavLink } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 import {
   CCard,
@@ -76,7 +76,7 @@ const Tables = () => {
                         </CTableDataCell>
                         <CTableDataCell>{item.first_name}</CTableDataCell>
                         <CTableDataCell>{item.last_name}</CTableDataCell>
-                        <CTableDataCell>{item.status}</CTableDataCell>
+                        <CTableDataCell>{item.active ? 'Active' : 'Inactive'}</CTableDataCell>
                         <CTableDataCell>{item.access_level}</CTableDataCell>
                         <CTableDataCell>{item.updatedAt}</CTableDataCell>
                         <CTableDataCell>{item.created_by}</CTableDataCell>

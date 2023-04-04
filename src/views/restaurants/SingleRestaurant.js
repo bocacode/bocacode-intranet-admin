@@ -1,6 +1,5 @@
 import * as React from 'react'
-import { useNavigate } from 'react-router-dom'
-
+import { useLocation } from 'react-router-dom'
 import {
   CButton,
   CCard,
@@ -8,6 +7,7 @@ import {
   CCardHeader,
   CCol,
   CFormInput,
+  CFormSelect,
   CInputGroup,
   CInputGroupText,
   CTable,
@@ -23,11 +23,26 @@ import { DocsExample } from 'src/components'
 
 import { UserContext } from 'src/App'
 
-const AddRestaurant = () => {
+const SingleRestaurant = () => {
   const { user } = React.useContext(UserContext)
   const [form, setForm] = React.useState({})
   const [logs, setLogs] = React.useState([])
-  const navigate = useNavigate()
+  const { state } = useLocation()
+
+  const id = state
+
+  React.useEffect(() => {
+    fetch(`${process.env.REACT_APP_API_ENDPOINT}/restaurants/restaurant?id=${id}`, {
+      method: 'GET',
+      headers: {
+        'Content-type': 'application/json',
+        Authorization: `Bearer ${user.accessToken}`, // notice the Bearer before your token
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => setForm(data))
+      .catch((err) => console.error(err))
+  }, [])
 
   // React.useEffect(() => {
   //   fetch(`${process.env.REACT_APP_API_ENDPOINT}/logs/log?email=${form.email}`, {
@@ -43,7 +58,8 @@ const AddRestaurant = () => {
   // }, [])
 
   const handleFormUpdate = (e) => {
-    setForm({ ...form, created_by: user.email, [e.target.name]: e.target.value })
+    console.log(e.target.name)
+    setForm({ ...form, [e.target.name]: e.target.value })
 
     if (e.target.name === 'active') {
       setForm({ ...form, [e.target.name]: e.target.checked })
@@ -51,21 +67,17 @@ const AddRestaurant = () => {
   }
 
   const handleFormSubmit = (e) => {
-    fetch(`${process.env.REACT_APP_API_ENDPOINT}/restaurants/`, {
-      method: 'POST',
+    fetch(`${process.env.REACT_APP_API_ENDPOINT}/restaurants/update`, {
+      method: 'PATCH',
       headers: {
         'Content-type': 'application/json',
-        Authorization: `Bearer ${user.accessToken}`, // notice the Bearer before your token
+        Authorization: `Bearer ${user.accessToken}`,
       },
       body: JSON.stringify(form),
     })
       .then((res) => {
-        if (!res.ok) {
-          e.preventDefault()
-        } else {
-          e.preventDefault()
-          navigate('/restaurants')
-        }
+        window.location.reload(false)
+        return res.json()
       })
       .catch((err) => console.error(err))
   }
@@ -76,7 +88,7 @@ const AddRestaurant = () => {
         <CCol xs={12}>
           <CCard className="mb-4">
             <CCardHeader>
-              <strong>Add Restaurant</strong>
+              <strong>Edit Restaurant</strong>
             </CCardHeader>
             <CCardBody>
               <p className="text-medium-emphasis small">
@@ -145,7 +157,7 @@ const AddRestaurant = () => {
                   </CInputGroup>
                 </CInputGroup>
                 <CButton onClick={handleFormSubmit} color="primary" className="px-4">
-                  Add Restaurant
+                  Update User
                 </CButton>
               </DocsExample>
             </CCardBody>
@@ -157,7 +169,7 @@ const AddRestaurant = () => {
         <CCol xs={12}>
           <CCard className="mb-4">
             <CCardHeader>
-              <strong>All Users</strong> <small>Basic example</small>
+              <strong>All Logs</strong> <small>Basic example</small>
             </CCardHeader>
             <CCardBody>
               <DocsExample href="components/table">
@@ -197,4 +209,4 @@ const AddRestaurant = () => {
   )
 }
 
-export default AddRestaurant
+export default SingleRestaurant

@@ -20,7 +20,6 @@ export const UserContext = createContext({})
 
 const App = () => {
   const [user, setUser] = useState({})
-  console.log('user in app', user)
 
   useEffect(() => {
     const bc_admin_user = localStorage.getItem('bc_admin_user')

@@ -9,6 +9,7 @@ const SingleUser = React.lazy(() => import('./views/users/SingleUser.js'))
 
 // Restaurants
 const Restaurants = React.lazy(() => import('./views/restaurants/Restaurants'))
+const SingleRestaurant = React.lazy(() => import('./views/restaurants/SingleRestaurant'))
 const AddRestaurant = React.lazy(() => import('./views/restaurants/AddRestaurant'))
 
 // Tutorials
@@ -25,6 +26,7 @@ const routes = [
 
   { path: '/restaurants', name: 'Restaurants', element: Restaurants },
   { path: '/restaurants/add', name: 'Restaurant', element: AddRestaurant },
+  { path: '/restaurants/restaurant', name: 'Single Restaurant', element: SingleRestaurant },
 
   { path: '/tutorials', name: 'Tutorials', element: Tutorials },
   { path: '/tutorials/add', name: 'Add Tutorials', element: AddTutorial },

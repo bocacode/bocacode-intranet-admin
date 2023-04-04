@@ -1,4 +1,6 @@
 import * as React from 'react'
+import { Link } from 'react-router-dom'
+
 import { UserContext } from 'src/App'
 import {
   CCard,
@@ -59,7 +61,11 @@ const Tables = () => {
                   {restaurants?.map((item) => {
                     return (
                       <CTableRow key={item.uid}>
-                        <CTableHeaderCell scope="row">{item.uid}</CTableHeaderCell>
+                        <CTableHeaderCell scope="row">
+                          <Link to="/restaurants/restaurant" state={item._id}>
+                            {item.uid}
+                          </Link>
+                        </CTableHeaderCell>
                         <CTableDataCell>{item.name}</CTableDataCell>
                         <CTableDataCell>{item.address}</CTableDataCell>
                         <CTableDataCell>{item.created_by}</CTableDataCell>
