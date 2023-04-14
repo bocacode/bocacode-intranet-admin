@@ -18,6 +18,7 @@ import { cilLockLocked, cilUser } from '@coreui/icons'
 import { UserContext } from '../../../App'
 
 const Login = () => {
+  const [showError, setShowError] = React.useState(false)
   const { setUser } = React.useContext(UserContext)
   const [form, setForm] = React.useState({})
 
@@ -42,7 +43,7 @@ const Login = () => {
           setUser(data)
         }
       })
-      .catch((err) => console.log(err))
+      .catch((err) => setShowError(true))
   }
 
   return (
@@ -85,11 +86,11 @@ const Login = () => {
                           Login
                         </CButton>
                       </CCol>
-                      <CCol xs={6} className="text-right">
-                        <CButton color="link" className="px-0">
-                          Forgot password?
-                        </CButton>
-                      </CCol>
+                      {showError && (
+                        <CCol xs={12} style={{ color: 'red', marginTop: '1rem' }}>
+                          No user found or invalid account/password
+                        </CCol>
+                      )}
                     </CRow>
                   </CForm>
                 </CCardBody>
