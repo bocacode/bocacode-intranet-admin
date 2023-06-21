@@ -16,6 +16,7 @@
     "prod": "yarn build && firebase deploy"
   },
   "dependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@coreui/chartjs": "^3.0.0",
     "@coreui/coreui": "^4.2.1",
     "@coreui/icons": "^2.1.0",
