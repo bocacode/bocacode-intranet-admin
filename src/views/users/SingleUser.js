@@ -42,7 +42,7 @@ const SingleUser = () => {
       .then((res) => res.json())
       .then((data) => setForm(data))
       .catch((err) => console.error(err))
-  }, [])
+  }, [id, user.accessToken])
 
   React.useEffect(() => {
     fetch(`${process.env.REACT_APP_API_ENDPOINT}/logs/log?email=${form.email}`, {
@@ -55,7 +55,7 @@ const SingleUser = () => {
       .then((res) => res.json())
       .then((data) => setLogs(data))
       .catch((err) => console.error(err))
-  }, [])
+  }, [user.accessToken])
 
   const handleFormUpdate = (e) => {
     console.log(e.target.name)

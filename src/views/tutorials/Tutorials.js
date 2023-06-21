@@ -8,7 +8,6 @@ import {
   CRow,
   CTable,
   CTableBody,
-  CTableCaption,
   CTableDataCell,
   CTableHead,
   CTableHeaderCell,
@@ -31,7 +30,7 @@ const Tutorials = () => {
       .then((res) => res.json())
       .then((parsedData) => setData(parsedData))
       .catch((err) => console.error(err))
-  }, [])
+  }, [user.accessToken])
 
   return (
     <CRow>

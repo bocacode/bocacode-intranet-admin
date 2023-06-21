@@ -7,27 +7,17 @@ import {
   CCardBody,
   CCardHeader,
   CCol,
-  CDropdown,
-  CDropdownDivider,
-  CDropdownItem,
-  CDropdownMenu,
-  CDropdownToggle,
   CForm,
-  CFormCheck,
   CFormInput,
-  CFormLabel,
-  CFormSelect,
-  CFormTextarea,
   CInputGroup,
   CInputGroupText,
   CRow,
 } from '@coreui/react'
-import { DocsExample } from 'src/components'
 
 const AddUser = () => {
   const { user } = React.useContext(UserContext)
   const [form, setForm] = React.useState({})
-  const [validation, setValidation] = React.useState(false)
+  // const [validation, setValidation] = React.useState(false)
   const navigate = useNavigate()
 
   const handleFormUpdate = (e) => {

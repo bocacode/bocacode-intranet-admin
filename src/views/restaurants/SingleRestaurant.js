@@ -7,7 +7,6 @@ import {
   CCardHeader,
   CCol,
   CFormInput,
-  CFormSelect,
   CInputGroup,
   CInputGroupText,
   CTable,
@@ -42,7 +41,7 @@ const SingleRestaurant = () => {
       .then((res) => res.json())
       .then((data) => setForm(data))
       .catch((err) => console.error(err))
-  }, [])
+  }, [id, user.accessToken])
 
   // React.useEffect(() => {
   //   fetch(`${process.env.REACT_APP_API_ENDPOINT}/logs/log?email=${form.email}`, {

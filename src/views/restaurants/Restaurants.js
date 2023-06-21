@@ -10,7 +10,6 @@ import {
   CRow,
   CTable,
   CTableBody,
-  CTableCaption,
   CTableDataCell,
   CTableHead,
   CTableHeaderCell,
@@ -33,7 +32,7 @@ const Tables = () => {
       .then((res) => res.json())
       .then((data) => setRestaurants(data))
       .catch((err) => console.error(err))
-  }, [])
+  }, [user.accessToken])
 
   return (
     <CRow>

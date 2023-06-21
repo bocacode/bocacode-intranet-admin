@@ -9,7 +9,6 @@ import {
   CRow,
   CTable,
   CTableBody,
-  CNavLink,
   CTableDataCell,
   CTableHead,
   CTableHeaderCell,
@@ -34,7 +33,7 @@ const Tables = () => {
       .then((res) => res.json())
       .then((data) => setUsers(data))
       .catch((err) => console.error(err))
-  }, [])
+  }, [user.accessToken])
 
   return (
     <CRow>
